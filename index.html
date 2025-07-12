@@ -2,602 +2,600 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>كود نيمز أونلاين مع فايربيس</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>كود نيمز أونلاين - ناعم وفخم</title>
 <style>
   body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f4f8;
-    color: #222;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #f0f0f0;
     margin: 0; padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  header {
-    background: #374151;
-    color: #f3f4f6;
-    padding: 15px 20px;
-    width: 100%;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+    overflow: hidden;
   }
   #container {
-    width: 95vw;
-    max-width: 900px;
-    margin-top: 20px;
+    background: rgba(0,0,0,0.65);
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    width: 400px;
+    padding: 25px 30px;
+    box-sizing: border-box;
   }
-  input, button {
-    padding: 8px 12px;
-    margin: 5px 3px;
+  header {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
     font-size: 1rem;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  input:focus {
+    background-color: #555;
   }
   button {
-    cursor: pointer;
-    background: #3b82f6;
+    width: 48%;
+    padding: 12px 0;
+    margin: 10px 1%;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
+    background: #8b5cf6;
     color: white;
-    transition: background 0.3s;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.5);
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   button:hover {
-    background: #2563eb;
+    background: #7c3aed;
+    transform: scale(1.05);
   }
-  #roomScreen, #roleScreen, #gameScreen {
-    background: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #aaa;
+  button:active {
+    transform: scale(0.95);
   }
   .hidden {
     display: none;
   }
-  #roles button {
-    margin: 5px;
-    min-width: 100px;
-    border-radius: 10px;
-  }
-  #info {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  #playersList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 15px;
-  }
-  .playerCard {
-    border-radius: 8px;
-    padding: 8px 12px;
-    background: #e0e7ff;
-    border: 2px solid transparent;
-    min-width: 120px;
+  #error, #roleError {
+    color: #ff6b6b;
+    font-weight: 600;
+    margin-top: 5px;
+    min-height: 20px;
     text-align: center;
+  }
+  #roles {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+  }
+  .role {
+    flex: 1;
+    margin: 0 5px;
+    background: #444;
+    padding: 12px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
   }
-  .playerCard.red { border-color: #ef4444; background: #fee2e2; }
-  .playerCard.blue { border-color: #3b82f6; background: #dbeafe; }
-  .playerCard.spy { border-color: #9ca3af; background: #f3f4f6; }
-  .playerCard.neutral { border-color: #6b7280; background: #f9fafb; }
+  .role:hover {
+    background: #7c3aed;
+    box-shadow: 0 0 10px #7c3aed;
+  }
+  .role.selected {
+    background: #a78bfa;
+    box-shadow: 0 0 15px #a78bfa;
+  }
+  /* شاشة اللعبة */
+  #gameScreen {
+    text-align: center;
+  }
+  #info {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  #playersList {
+    margin-bottom: 20px;
+  }
+  .playerCard {
+    padding: 6px 12px;
+    margin: 6px 4px;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: 600;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .playerCard.red {
+    background-color: #f87171;
+  }
+  .playerCard.blue {
+    background-color: #60a5fa;
+  }
+  .playerCard.spy {
+    background-color: #e879f9;
+  }
+  .playerCard.neutral {
+    background-color: #9ca3af;
+  }
   #board {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
+    margin-bottom: 20px;
   }
   .card {
-    user-select: none;
-    cursor: pointer;
-    background: #e0e7ff;
+    background-color: #333;
     border-radius: 12px;
-    padding: 20px;
+    padding: 12px;
     font-weight: 700;
-    font-size: 1.1rem;
-    text-align: center;
-    color: #1e293b;
-    box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
-    transition: background 0.3s;
-    position: relative;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    color: #eee;
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
-  .card.red { background: #fee2e2; color: #b91c1c; }
-  .card.blue { background: #dbeafe; color: #2563eb; }
-  .card.neutral { background: #f3f4f6; color: #6b7280; }
-  .card.assassin { background: #1f2937; color: #f87171; }
+  .card:hover {
+    background-color: #555;
+    transform: scale(1.05);
+  }
   .card.revealed {
     cursor: default;
-    box-shadow: none;
-    text-decoration: line-through;
+    color: white;
+  }
+  .card.red {
+    background-color: #f87171 !important;
+  }
+  .card.blue {
+    background-color: #60a5fa !important;
+  }
+  .card.neutral {
+    background-color: #9ca3af !important;
+    color: #222 !important;
+  }
+  .card.assassin {
+    background-color: #1f2937 !important;
+    color: #ef4444 !important;
+    font-weight: 900;
   }
   #controls {
-    margin-top: 15px;
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-around;
   }
-  #error, #roleError {
-    color: #ef4444;
-    margin-top: 10px;
+  #controls button {
+    width: 30%;
   }
 </style>
 </head>
 <body>
-
-<header>كود نيمز أونلاين مع فايربيس</header>
-
-<div id="container">
-  <div id="roomScreen">
-    <h2>إنشاء/دخول غرفة</h2>
-    <input id="roomName" placeholder="اسم الغرفة" autocomplete="off" />
-    <input id="roomPass" type="password" placeholder="كلمة السر للغرفة" autocomplete="off" />
-    <br/>
-    <button id="createBtn">أنشئ غرفة</button>
-    <button id="joinBtn">ادخل الغرفة</button>
-    <div id="error"></div>
-  </div>
-
-  <div id="roleScreen" class="hidden">
-    <h2>اختر اسمك ودورك</h2>
-    <input id="playerName" placeholder="اسمك" autocomplete="off" />
-    <div id="roles">
-      <button class="role" data-role="spy">سباي ماستر</button>
-      <button class="role" data-role="red">فريق أحمر</button>
-      <button class="role" data-role="blue">فريق أزرق</button>
-      <button class="role" data-role="neutral">مراقب</button>
+  <div id="container">
+    <header>كود نيمز أونلاين - ناعم وفخم</header>
+    <div id="roomScreen">
+      <h2>إنشاء أو دخول غرفة</h2>
+      <input id="roomName" placeholder="اسم الغرفة" autocomplete="off" />
+      <input id="roomPass" type="password" placeholder="كلمة السر" autocomplete="off" />
+      <div id="error"></div>
+      <div style="display:flex; justify-content:center; gap:12px;">
+        <button id="createBtn">أنشئ غرفة</button>
+        <button id="joinBtn">ادخل الغرفة</button>
+      </div>
     </div>
-    <button id="joinGame">انضم للعبة</button>
-    <div id="roleError"></div>
-  </div>
 
-  <div id="gameScreen" class="hidden">
-    <div id="info"></div>
-    <div id="playersList"></div>
-    <div id="board"></div>
-    <div id="controls">
-      <button id="pass">غيّر الدور</button>
-      <button id="restart">إعادة اللعبة</button>
-      <button id="leave">الخروج</button>
+    <div id="roleScreen" class="hidden">
+      <h2>ادخل اسمك واختر دورك</h2>
+      <input id="playerName" placeholder="اسمك" autocomplete="off" />
+      <div id="roleError"></div>
+      <div id="roles">
+        <div class="role" data-role="spy">سباي ماستر</div>
+        <div class="role" data-role="red">أحمر</div>
+        <div class="role" data-role="blue">أزرق</div>
+        <div class="role" data-role="neutral">مراقب</div>
+      </div>
+      <button id="joinGame">انضم للعبة</button>
+    </div>
+
+    <div id="gameScreen" class="hidden">
+      <div id="info"></div>
+      <div id="playersList"></div>
+      <div id="board"></div>
+      <div id="controls">
+        <button id="pass">غيّر الدور</button>
+        <button id="restart">إعادة اللعبة</button>
+        <button id="leave">خروج</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-<script>
-// Firebase config - غيّر القيم حسب مشروعك في Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyDTAqaqpmPX0JYie21Gl2ysp1mHgKuw2EY",
-  authDomain: "myupload-948bd.firebaseapp.com",
-  databaseURL: "https://myupload-948bd-default-rtdb.firebaseio.com",
-  projectId: "myupload-948bd",
-  storageBucket: "myupload-948bd.appspot.com",
-  messagingSenderId: "451397571101",
-  appId: "1:451397571101:web:90b7cf96637819f734ecf4"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-const wordsPool = [
-  "جبل","بحر","قمر","شمس","نهر","صحراء","طيارة","سيارة","حصان","قطار","كمبيوتر","جوال",
-  "مدينة","قرية","شارع","مدرسة","جامعة","مستشفى","كتاب","قلم","كوب","ساعة","شباك","باب",
-  "نار","ثلج","مطر","ريح","غيمة","ظلال","ضوء","ظلام","أمل","حب","صداقة","عدو","قوة","ضعف",
-  "علم","جهل","سر","حقيقة","خداع","نفاق","إخلاص","خوف","شجاعة","أمن","حرب","سلام","سياسة",
-  "اقتصاد","نفط","ذهب","فضة","حديد","تراب","ماء","هواء","خشب","زجاج","ملح","سكر","فلفل",
-  "خبز","أرز","تفاح","موز","برتقال","عنب","توت","ليمون","بطيخ","تمر","جزر","طماطم","بصل",
-  "ثوم","خيار","قرع","مطبخ","حمام","غرفة","بيت","قصر","كوخ","معبد","كنيسة","مسجد","سوق",
-  "مول","مطعم","مقهى","مطار","ميناء","محطة","بنك","مكتب","مصنع","مزرعة","حديقة","غابة",
-  "شاطئ","سفينة","باخرة","غواصة","دبابة","مسدس","بندقية","سيف","رمح","درع","خوذة","جيش",
-  "شرطة","حارس","لص","قاتل","ساحر","شاعر","كاتب","رسام","فنان","موسيقي","مطرب","ممثّل",
-  "رياضي","لاعب","مدرب","حكم","مشجع","سباق","مباراة","بطولة","كأس","ميدالية","كرة","شبكة",
-  "قفاز","خوذة","نظارة","سماعة","حذاء","جاكيت","قميص","بنطلون","تنورة","فستان","بدلة","حزام",
-  "شنطة","مفتاح","مقص","مطرقة","مسمار","مبرد","منشار","كماشة","مغناطيس","بطارية","مصباح",
-  "كاميرا","تلفاز","راديو","ميكروفون","لوحة","خريطة","ساعة حائط","مروحة","مكيف","ثلاجة",
-  "فرن","موقد","غلاية","قدر","ملعقة","شوكة","سكين","صحن","كأس ماء","زبدية","صينية",
-  "كنبة","كرسي","طاولة","دولاب","مرآة","سجادة","ستارة","وسادة","بطانية","مرتبة",
-  "زر","حبل","شريط","صندوق","علبة","دبوس","مشبك","قفل","سلسلة","إطار",
-  "درج","ممر","سطح","قبو","حديقة منزلية","مرآب","بوابة","مدخل","مخرج","رواق",
-  "ثريا","شمعة","مصباح يدوي","ولاعة","ولاعة كهربائية","مصباح مكتب","ضوء نيون","كشاف",
-];
-
-// Utility to shuffle array
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-// Game variables
-let currentRoom = null;
-let currentPass = null;
-let playerId = null;
-let playerRole = null;
-let playerName = null;
-let players = {};
-let board = [];
-let turn = "red";
-let redLeft = 9;
-let blueLeft = 8;
-let gameEnded = false;
-
-// DOM Elements
-const roomScreen = document.getElementById("roomScreen");
-const roleScreen = document.getElementById("roleScreen");
-const gameScreen = document.getElementById("gameScreen");
-
-const roomNameInput = document.getElementById("roomName");
-const roomPassInput = document.getElementById("roomPass");
-const createBtn = document.getElementById("createBtn");
-const joinBtn = document.getElementById("joinBtn");
-const errorDiv = document.getElementById("error");
-
-const playerNameInput = document.getElementById("playerName");
-const rolesDiv = document.getElementById("roles");
-const joinGameBtn = document.getElementById("joinGame");
-const roleErrorDiv = document.getElementById("roleError");
-
-const infoDiv = document.getElementById("info");
-const playersListDiv = document.getElementById("playersList");
-const boardDiv = document.getElementById("board");
-
-const passBtn = document.getElementById("pass");
-const restartBtn = document.getElementById("restart");
-const leaveBtn = document.getElementById("leave");
-
-
-// ========================
-// ==== وظائف الفايربيس ====
-// ========================
-
-// يشيك إذا الغرفة موجودة وكلمة السر صح
-function checkRoom(room, pass) {
-  return db.ref("rooms/" + room).get().then(snapshot => {
-    if (!snapshot.exists()) return {exists:false};
-    const data = snapshot.val();
-    if(data.pass !== pass) return {exists:true, valid:false};
-    return {exists:true, valid:true, data};
-  });
-}
-
-// أنشئ غرفة جديدة في Firebase
-function createRoom(room, pass) {
-  const roomData = {
-    pass,
-    players: {},
-    board: [],
-    turn: "red",
-    redLeft: 9,
-    blueLeft: 8,
-    gameEnded: false,
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <script>
+  // إعداد Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTAqaqpmPX0JYie21Gl2ysp1mHgKuw2EY",
+    authDomain: "myupload-948bd.firebaseapp.com",
+    databaseURL: "https://myupload-948bd-default-rtdb.firebaseio.com",
+    projectId: "myupload-948bd",
+    storageBucket: "myupload-948bd.appspot.com",
+    messagingSenderId: "451397571101",
+    appId: "1:451397571101:web:90b7cf96637819f734ecf4"
   };
-  return db.ref("rooms/" + room).set(roomData);
-}
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-// حدّث بيانات الغرفة
-function updateRoom(room, data) {
-  return db.ref("rooms/" + room).update(data);
-}
-
-// تابع تحديث بيانات الغرفة أول بأول
-function subscribeRoom(room, onUpdate) {
-  return db.ref("rooms/" + room).on("value", snapshot => {
-    if(snapshot.exists()) onUpdate(snapshot.val());
-  });
-}
-
-// حذف لاعب من الغرفة
-function removePlayer(room, playerId) {
-  return db.ref(`rooms/${room}/players/${playerId}`).remove();
-}
-
-// إضافة لاعب جديد
-function addPlayer(room, id, player) {
-  return db.ref(`rooms/${room}/players/${id}`).set(player);
-}
-
-// تحديث لاعب
-function updatePlayer(room, id, data) {
-  return db.ref(`rooms/${room}/players/${id}`).update(data);
-}
-
-// =======================================
-// ======= شاشة الغرفة (إنشاء/دخول) =======
-// =======================================
-
-createBtn.onclick = async () => {
-  const room = roomNameInput.value.trim();
-  const pass = roomPassInput.value.trim();
-  if (!room || !pass) {
-    errorDiv.textContent = "عبي اسم الغرفة وكلمة السر";
-    return;
-  }
-  const res = await checkRoom(room, pass);
-  if (res.exists) {
-    errorDiv.textContent = "الغرفة موجودة، جرب تدخل بدل ما تنشئ";
-    return;
-  }
-  await createRoom(room, pass);
-  currentRoom = room;
-  currentPass = pass;
-  playerId = generateId();
-  errorDiv.textContent = "";
-  showRoleScreen();
-};
-
-joinBtn.onclick = async () => {
-  const room = roomNameInput.value.trim();
-  const pass = roomPassInput.value.trim();
-  if (!room || !pass) {
-    errorDiv.textContent = "عبي اسم الغرفة وكلمة السر";
-    return;
-  }
-  const res = await checkRoom(room, pass);
-  if (!res.exists) {
-    errorDiv.textContent = "الغرفة غير موجودة";
-    return;
-  }
-  if (!res.valid) {
-    errorDiv.textContent = "كلمة السر غلط";
-    return;
-  }
-  currentRoom = room;
-  currentPass = pass;
-  playerId = generateId();
-  errorDiv.textContent = "";
-  showRoleScreen();
-};
-
-// =======================================
-// ======= شاشة اختيار الدور والاسم =======
-// =======================================
-
-let selectedRole = null;
-rolesDiv.onclick = e => {
-  if (!e.target.classList.contains("role")) return;
-  selectedRole = e.target.getAttribute("data-role");
-  Array.from(rolesDiv.children).forEach(btn => btn.style.border = "");
-  e.target.style.border = "3px solid #2563eb";
-};
-
-joinGameBtn.onclick = async () => {
-  const name = playerNameInput.value.trim();
-  if (!name) {
-    roleErrorDiv.textContent = "اكتب اسمك";
-    return;
-  }
-  if (!selectedRole) {
-    roleErrorDiv.textContent = "اختر دورك";
-    return;
-  }
-  playerName = name;
-  playerRole = selectedRole;
-
-  // نضيف اللاعب في الغرفة
-  await addPlayer(currentRoom, playerId, {
-    name: playerName,
-    role: playerRole,
-    ready: true,
-  });
-
-  // اشترك بتحديث الغرفة عشان نتابع اللعبة
-  subscribeRoom(currentRoom, gameData => {
-    updateGameState(gameData);
-  });
-
-  errorDiv.textContent = "";
-  roleErrorDiv.textContent = "";
-  showGameScreen();
-};
-
-// =======================================
-// =========== شاشة اللعبة ================
-// =======================================
-
-function updateGameState(data) {
-  players = data.players || {};
-  board = data.board || [];
-  turn = data.turn || "red";
-  redLeft = data.redLeft || 9;
-  blueLeft = data.blueLeft || 8;
-  gameEnded = data.gameEnded || false;
-
-  // حدث اللوحة
-  renderBoard();
-  renderPlayers();
-  renderInfo();
-
-  // اذا خلصت اللعبة، عطنا رسالة
-  if(gameEnded){
-    infoDiv.textContent = "اللعبة انتهت! الفريق الفائز: " + (redLeft === 0 ? "الأحمر" : "الأزرق");
-  }
-}
-
-function renderBoard() {
-  boardDiv.innerHTML = "";
-  if(board.length === 0) return;
-  board.forEach((card, idx) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    if(card.revealed){
-      div.classList.add("revealed");
-      if(card.type === "red") div.classList.add("red");
-      else if(card.type === "blue") div.classList.add("blue");
-      else if(card.type === "neutral") div.classList.add("neutral");
-      else if(card.type === "assassin") div.classList.add("assassin");
-    }
-    div.textContent = card.word;
-    div.onclick = () => {
-      if(gameEnded) return;
-      if(card.revealed) return;
-      if(playerRole === "neutral") return; // مراقب ما يقدر يلمس
-      if(turn !== playerRole && playerRole !== "spy") return; // غير دوره
-      revealCard(idx);
-    };
-    boardDiv.appendChild(div);
-  });
-}
-
-function renderPlayers() {
-  playersListDiv.innerHTML = "";
-  Object.entries(players).forEach(([id, p]) => {
-    const div = document.createElement("div");
-    div.className = "playerCard " + p.role;
-    div.textContent = p.name + (id === playerId ? " (أنت)" : "");
-    playersListDiv.appendChild(div);
-  });
-}
-
-function renderInfo() {
-  infoDiv.textContent = `دور: ${turn} | متبقي أحمر: ${redLeft} | متبقي أزرق: ${blueLeft}`;
-}
-
-// كشف بطاقة اللعبة
-function revealCard(index) {
-  if(board[index].revealed) return;
-  board[index].revealed = true;
-
-  // حدّث العدادات
-  if(board[index].type === "red") redLeft--;
-  else if(board[index].type === "blue") blueLeft--;
-  else if(board[index].type === "assassin"){
-    gameEnded = true;
-  }
-
-  // التبديل التلقائي للدور اذا كشف بطاقة ليست لفريقه
-  if(board[index].type !== turn){
-    turn = turn === "red" ? "blue" : "red";
-  }
-
-  // تحقق من الفوز
-  if(redLeft === 0 || blueLeft === 0){
-    gameEnded = true;
-  }
-
-  // حدّث قاعدة البيانات
-  updateRoom(currentRoom, {
-    board,
-    turn,
-    redLeft,
-    blueLeft,
-    gameEnded
-  });
-}
-
-// إعادة تعيين اللعبة (توزيع جديد)
-restartBtn.onclick = () => {
-  if(playerRole !== "spy"){
-    alert("فقط سباي ماستر يقدر يعيد اللعبة");
-    return;
-  }
-  startNewGame();
-};
-
-// بدء لعبة جديدة
-function startNewGame() {
-  // اخلط الكلمات واختار أول 25 كلمة
-  const shuffled = shuffle([...wordsPool]);
-  const selectedWords = shuffled.slice(0, 25);
-
-  // توزيع أنواع البطاقات
-  // 9 أحمر، 8 أزرق، 7 محايد، 1 قاتل
-  let types = [
-    ...Array(9).fill("red"),
-    ...Array(8).fill("blue"),
-    ...Array(7).fill("neutral"),
-    "assassin"
+  // كلمات اللعبة
+  const wordsPool = [
+    "جبل", "بحر", "قمر", "شمس", "نهر", "صحراء", "طيارة", "سيارة", "حصان", "قطار", "كمبيوتر", "جوال",
+    "مدينة", "قرية", "شارع", "مدرسة", "جامعة", "مستشفى", "كتاب", "قلم", "كوب", "ساعة", "شباك", "باب",
+    "نار", "ثلج", "مطر", "ريح", "غيمة", "ظلال", "ضوء", "ظلام", "أمل", "حب", "صداقة", "عدو", "قوة", "ضعف",
+    "علم", "جهل", "سر", "حقيقة", "خداع", "نفاق", "إخلاص", "خوف", "شجاعة", "أمن", "حرب", "سلام", "سياسة",
+    "اقتصاد", "نفط", "ذهب", "فضة", "حديد", "تراب", "ماء", "هواء", "خشب", "زجاج", "ملح", "سكر", "فلفل",
+    "خبز", "أرز", "تفاح", "موز", "برتقال", "عنب", "توت", "ليمون", "بطيخ", "تمر", "جزر", "طماطم", "بصل",
+    "ثوم", "خيار", "قرع", "مطبخ", "حمام", "غرفة", "بيت", "قصر", "كوخ", "معبد", "كنيسة", "مسجد", "سوق",
+    "مول", "مطعم", "مقهى", "مطار", "ميناء", "محطة", "بنك", "مكتب", "مصنع", "مزرعة", "حديقة", "غابة",
+    "شاطئ", "سفينة", "باخرة", "غواصة", "دبابة", "مسدس", "بندقية", "سيف", "رمح", "درع", "خوذة", "جيش",
+    "شرطة", "حارس", "لص", "قاتل", "ساحر", "شاعر", "كاتب", "رسام", "فنان", "موسيقي", "مطرب", "ممثّل",
+    "رياضي", "لاعب", "مدرب", "حكم", "مشجع", "سباق", "مباراة", "بطولة", "كأس", "ميدالية", "كرة", "شبكة",
+    "قفاز", "خوذة", "نظارة", "سماعة", "حذاء", "جاكيت", "قميص", "بنطلون", "تنورة", "فستان", "بدلة", "حزام",
+    "شنطة", "مفتاح", "مقص", "مطرقة", "مسمار", "مبرد", "منشار", "كماشة", "مغناطيس", "بطارية", "مصباح",
+    "كاميرا", "تلفاز", "راديو", "ميكروفون", "لوحة", "خريطة", "ساعة حائط", "مروحة", "مكيف", "ثلاجة",
+    "فرن", "موقد", "غلاية", "قدر", "ملعقة", "شوكة", "سكين", "صحن", "كأس ماء", "زبدية", "صينية",
+    "كنبة", "كرسي", "طاولة", "دولاب", "مرآة", "سجادة", "ستارة", "وسادة", "بطانية", "مرتبة",
+    "زر", "حبل", "شريط", "صندوق", "علبة", "دبوس", "مشبك", "قفل", "سلسلة", "إطار",
+    "درج", "ممر", "سطح", "قبو", "حديقة منزلية", "مرآب", "بوابة", "مدخل", "مخرج", "رواق",
+    "ثريا", "شمعة", "مصباح يدوي", "ولاعة", "ولاعة كهربائية", "مصباح مكتب", "ضوء نيون", "كشاف",
   ];
-  shuffle(types);
 
-  board = selectedWords.map((word, i) => ({
-    word,
-    type: types[i],
-    revealed: false
-  }));
+  // أزرار وعناصر
+  const roomScreen = document.getElementById("roomScreen");
+  const roleScreen = document.getElementById("roleScreen");
+  const gameScreen = document.getElementById("gameScreen");
 
-  turn = "red";
-  redLeft = 9;
-  blueLeft = 8;
-  gameEnded = false;
+  const roomNameInput = document.getElementById("roomName");
+  const roomPassInput = document.getElementById("roomPass");
+  const createBtn = document.getElementById("createBtn");
+  const joinBtn = document.getElementById("joinBtn");
+  const errorDiv = document.getElementById("error");
 
-  updateRoom(currentRoom, {
-    board,
-    turn,
-    redLeft,
-    blueLeft,
-    gameEnded
+  const playerNameInput = document.getElementById("playerName");
+  const rolesDiv = document.getElementById("roles");
+  const joinGameBtn = document.getElementById("joinGame");
+  const roleErrorDiv = document.getElementById("roleError");
+
+  const infoDiv = document.getElementById("info");
+  const playersListDiv = document.getElementById("playersList");
+  const boardDiv = document.getElementById("board");
+  const passBtn = document.getElementById("pass");
+  const restartBtn = document.getElementById("restart");
+  const leaveBtn = document.getElementById("leave");
+
+  // متغيرات الحالة
+  let currentRoom = null;
+  let currentPass = null;
+  let players = {};
+  let board = [];
+  let turn = "red";
+  let redLeft = 9;
+  let blueLeft = 8;
+  let gameEnded = false;
+  let playerId = null;
+  let playerRole = null;
+  let playerName = null;
+
+  // اختيار دور
+  rolesDiv.addEventListener("click", e => {
+    if(!e.target.classList.contains("role")) return;
+    [...rolesDiv.children].forEach(r => r.classList.remove("selected"));
+    e.target.classList.add("selected");
+    playerRole = e.target.dataset.role;
   });
-}
 
-// تمرير الدور
-passBtn.onclick = () => {
-  if(playerRole !== "spy"){
-    alert("فقط سباي ماستر يقدر يمرر الدور");
-    return;
+  // إنشاء غرفة
+  createBtn.onclick = async () => {
+    errorDiv.textContent = "";
+    const room = roomNameInput.value.trim();
+    const pass = roomPassInput.value.trim();
+    if(!room) return errorDiv.textContent = "لازم تكتب اسم الغرفة.";
+    if(!pass) return errorDiv.textContent = "لازم تكتب كلمة السر.";
+
+    const roomRef = db.ref("rooms/" + room);
+    const snapshot = await roomRef.get();
+    if(snapshot.exists()){
+      errorDiv.textContent = "الغرفة موجودة، استخدم 'ادخل الغرفة'.";
+      return;
+    }
+
+    // إنشاء بيانات الغرفة الجديدة
+    await roomRef.set({
+      pass,
+      players: {},
+      board: [],
+      turn: "red",
+      redLeft: 9,
+      blueLeft: 8,
+      gameEnded: false,
+    });
+
+    currentRoom = room;
+    currentPass = pass;
+
+    showRoleScreen();
+  };
+
+  // دخول غرفة
+  joinBtn.onclick = async () => {
+    errorDiv.textContent = "";
+    const room = roomNameInput.value.trim();
+    const pass = roomPassInput.value.trim();
+    if(!room) return errorDiv.textContent = "اكتب اسم الغرفة.";
+    if(!pass) return errorDiv.textContent = "اكتب كلمة السر.";
+
+    const roomRef = db.ref("rooms/" + room);
+    const snapshot = await roomRef.get();
+    if(!snapshot.exists()){
+      errorDiv.textContent = "الغرفة غير موجودة.";
+      return;
+    }
+
+    const data = snapshot.val();
+    if(data.pass !== pass){
+      errorDiv.textContent = "كلمة السر خاطئة.";
+      return;
+    }
+
+    currentRoom = room;
+    currentPass = pass;
+
+    showRoleScreen();
+  };
+
+  // انضمام للعبة بعد اختيار الاسم والدور
+  joinGameBtn.onclick = async () => {
+    roleErrorDiv.textContent = "";
+    playerName = playerNameInput.value.trim();
+    if(!playerName) return roleErrorDiv.textContent = "اكتب اسمك.";
+    if(!playerRole) return roleErrorDiv.textContent = "اختار دورك.";
+
+    playerId = generateId();
+
+    const playerData = {
+      name: playerName,
+      role: playerRole,
+      id: playerId,
+      score: 0
+    };
+
+    // إضافة اللاعب للغرفة في الفايربيس
+    const playerRef = db.ref(`rooms/${currentRoom}/players/${playerId}`);
+    await playerRef.set(playerData);
+
+    subscribeToRoom();
+
+    showGameScreen();
+  };
+
+  // توليد معرّف عشوائي
+  function generateId(){
+    return Math.random().toString(36).substr(2,9);
   }
-  turn = turn === "red" ? "blue" : "red";
-  updateRoom(currentRoom, { turn });
-};
 
-// الخروج من الغرفة
-leaveBtn.onclick = async () => {
-  await removePlayer(currentRoom, playerId);
-  currentRoom = null;
-  currentPass = null;
-  playerId = null;
-  playerRole = null;
-  playerName = null;
-  players = {};
-  board = [];
-  turn = "red";
-  redLeft = 9;
-  blueLeft = 8;
-  gameEnded = false;
+  // الاشتراك لتحديث الغرفة
+  let unsubscribe = null;
+  function subscribeToRoom(){
+    if(unsubscribe) unsubscribe();
+    const roomRef = db.ref("rooms/" + currentRoom);
+    unsubscribe = roomRef.on("value", snapshot => {
+      if(!snapshot.exists()) return;
+      const data = snapshot.val();
 
-  unsubscribeRoom();
+      // تحقق من كلمة السر
+      if(data.pass !== currentPass){
+        alert("تم تغيير كلمة السر أو تم حذف الغرفة.");
+        leaveRoom();
+        return;
+      }
 
-  showRoomScreen();
-};
+      players = data.players || {};
+      board = data.board || [];
+      turn = data.turn || "red";
+      redLeft = data.redLeft ?? 9;
+      blueLeft = data.blueLeft ?? 8;
+      gameEnded = data.gameEnded || false;
 
-// =======================================
-// ======= وظائف الشاشة =======
-// =======================================
+      updateGameUI();
+    });
+  }
 
-function showRoomScreen() {
-  roomScreen.classList.remove("hidden");
-  roleScreen.classList.add("hidden");
-  gameScreen.classList.add("hidden");
-}
+  // تحديث واجهة اللعبة
+  function updateGameUI(){
+    // معلومات الدور واللاعب
+    infoDiv.textContent = `دور: ${turn === "red" ? "الأحمر" : "الأزرق"} | أنت: ${playerName} (${playerRole})`;
 
-function showRoleScreen() {
-  roomScreen.classList.add("hidden");
-  roleScreen.classList.remove("hidden");
-  gameScreen.classList.add("hidden");
-}
+    // قائمة اللاعبين
+    playersListDiv.innerHTML = "";
+    Object.values(players).forEach(p => {
+      const div = document.createElement("div");
+      div.textContent = p.name + (p.id === playerId ? " (أنت)" : "");
+      div.classList.add("playerCard");
+      div.classList.add(p.role);
+      playersListDiv.appendChild(div);
+    });
 
-function showGameScreen() {
-  roomScreen.classList.add("hidden");
-  roleScreen.classList.add("hidden");
-  gameScreen.classList.remove("hidden");
-}
+    // عرض اللوحة
+    boardDiv.innerHTML = "";
+    board.forEach((card, i) => {
+      const cardDiv = document.createElement("div");
+      cardDiv.classList.add("card");
+      if(card.revealed) cardDiv.classList.add("revealed");
 
-// توليد معرف عشوائي للاعب
-function generateId() {
-  return Math.random().toString(36).substr(2, 9);
-}
+      if(card.type === "red") cardDiv.classList.add("red");
+      else if(card.type === "blue") cardDiv.classList.add("blue");
+      else if(card.type === "neutral") cardDiv.classList.add("neutral");
+      else if(card.type === "assassin") cardDiv.classList.add("assassin");
 
-// إلغاء الاشتراك من تحديث الغرفة
-let unsubscribe = null;
-function unsubscribeRoom() {
-  if(unsubscribe) unsubscribe();
-  unsubscribe = null;
-}
+      cardDiv.textContent = card.word;
+      boardDiv.appendChild(cardDiv);
 
-// في بداية التحميل، اظهر شاشة الغرفة
-showRoomScreen();
+      if(!card.revealed && !gameEnded && playerRole !== "spy"){
+        cardDiv.onclick = () => {
+          if(turn !== playerRole) return;
+          revealCard(i);
+        };
+      }
+    });
 
-</script>
+    passBtn.disabled = playerRole !== "spy" || gameEnded;
+    restartBtn.disabled = !gameEnded && playerRole !== "spy";
+  }
+
+  // كشف بطاقة
+  async function revealCard(index){
+    if(gameEnded) return;
+
+    const card = board[index];
+    if(card.revealed) return;
+
+    card.revealed = true;
+
+    // تحديث الأعداد حسب البطاقة
+    if(card.type === "red") redLeft--;
+    else if(card.type === "blue") blueLeft--;
+
+    // تغيير الدور أو انتهاء اللعبة
+    if(card.type === "assassin"){
+      gameEnded = true;
+      alert(`انتهت اللعبة! الخاسر هو فريق ${turn === "red" ? "الأحمر" : "الأزرق"}`);
+    } else if(redLeft === 0){
+      gameEnded = true;
+      alert("انتهت اللعبة! الفريق الأحمر فاز 🎉");
+    } else if(blueLeft === 0){
+      gameEnded = true;
+      alert("انتهت اللعبة! الفريق الأزرق فاز 🎉");
+    } else if(card.type !== turn){
+      turn = turn === "red" ? "blue" : "red";
+    }
+
+    // تحديث بيانات الغرفة
+    const roomRef = db.ref("rooms/" + currentRoom);
+    await roomRef.update({
+      board,
+      turn,
+      redLeft,
+      blueLeft,
+      gameEnded
+    });
+  }
+
+  // تغيير الدور (لكل سباي ماستر فقط)
+  passBtn.onclick = async () => {
+    if(playerRole !== "spy") return;
+    if(gameEnded) return;
+
+    turn = turn === "red" ? "blue" : "red";
+    const roomRef = db.ref("rooms/" + currentRoom);
+    await roomRef.update({ turn });
+  };
+
+  // إعادة اللعبة (لكل سباي ماستر فقط)
+  restartBtn.onclick = async () => {
+    if(playerRole !== "spy") return;
+
+    // إعادة تهيئة اللعبة
+    board = generateBoard();
+    turn = "red";
+    redLeft = 9;
+    blueLeft = 8;
+    gameEnded = false;
+
+    const roomRef = db.ref("rooms/" + currentRoom);
+    await roomRef.update({
+      board,
+      turn,
+      redLeft,
+      blueLeft,
+      gameEnded
+    });
+  };
+
+  // خروج من الغرفة
+  leaveBtn.onclick = () => {
+    leaveRoom();
+  };
+
+  // ترك الغرفة وتنظيف
+  async function leaveRoom(){
+    if(unsubscribe) unsubscribe();
+    if(playerId){
+      const playerRef = db.ref(`rooms/${currentRoom}/players/${playerId}`);
+      await playerRef.remove();
+    }
+    currentRoom = null;
+    currentPass = null;
+    playerRole = null;
+    playerName = null;
+    playerId = null;
+    players = {};
+    board = [];
+    gameEnded = false;
+    turn = "red";
+    redLeft = 9;
+    blueLeft = 8;
+
+    roleScreen.classList.add("hidden");
+    gameScreen.classList.add("hidden");
+    roomScreen.classList.remove("hidden");
+  }
+
+  // عرض شاشة اختيار الاسم والدور
+  function showRoleScreen(){
+    roomScreen.classList.add("hidden");
+    roleScreen.classList.remove("hidden");
+    gameScreen.classList.add("hidden");
+  }
+
+  // عرض شاشة اللعبة
+  function showGameScreen(){
+    roomScreen.classList.add("hidden");
+    roleScreen.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+  }
+
+  // إنشاء لوحة اللعبة الجديدة
+  function generateBoard(){
+    // اختيار 25 كلمة عشوائية بدون تكرار
+    const shuffled = wordsPool.sort(() => 0.5 - Math.random());
+    const selectedWords = shuffled.slice(0, 25);
+
+    // توزيع الأدوار على الكلمات
+    const types = [];
+    for(let i=0; i<9; i++) types.push("red");
+    for(let i=0; i<8; i++) types.push("blue");
+    for(let i=0; i<7; i++) types.push("neutral");
+    types.push("assassin");
+
+    // خلط الأدوار
+    types.sort(() => 0.5 - Math.random());
+
+    // بناء اللوحة
+    const board = selectedWords.map((word, i) => ({
+      word,
+      type: types[i],
+      revealed: false,
+    }));
+    return board;
+  }
+  </script>
 </body>
 </html>
