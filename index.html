@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>كود نيمز أونلاين بدون سيرفر</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    background: #222;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  #setup, #game {
+    max-width: 900px;
+    width: 100%;
+    margin: 1rem;
+  }
+  button {
+    padding: 10px 20px;
+    margin: 0.3rem;
+    background: #333;
+    border: none;
+    border-radius: 6px;
+    color: #eee;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #555;
+  }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .card {
+    background: #222;
+    padding: 10px;
+    border-radius: 7px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .card.revealed.red {
+    background-color: #c0392b;
+    color: #fff;
+    cursor: default;
+  }
+  .card.revealed.blue {
+    background-color: #2980b9;
+    color: #fff;
+    cursor: default;
+  }
+  .card.revealed.neutral {
+    background-color: #7f8c8d;
+    color: #222;
+    cursor: default;
+  }
+  .card.revealed.assassin {
+    background-color: #000;
+    color: #e74c3c;
+    font-weight: bold;
+    cursor: default;
+  }
+  #status {
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    min-height: 2rem;
+  }
+  #linkBox {
+    margin-top: 1rem;
+    word-break: break-all;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+    user-select: all;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<header>كود نيمز أونلاين بدون سيرفر (شارك الرابط مع ربعك)</header>
+
+<div id="setup">
+  <button id="newGameBtn">سوي لعبة جديدة</button>
+  <div id="linkBox" style="display:none;"></div>
+</div>
+
+<div id="game" style="display:none;">
+  <div id="status"></div>
+  <div id="board"></div>
+  <button id="restartBtn">إعادة اللعب بنفس الروم</button>
+  <button id="backBtn">رجوع للصفحة الرئيسية</button>
+</div>
+
+<script>
+  // كلمات كثيرة للعبة
+  const wordsPool = [
+    "قمر","شمس","نجم","بحر","صحراء","جبل","سيارة","بيت","قلم","كتاب",
+    "هاتف","كمبيوتر","كرة","ماء","نار","ريح","شجرة","طائرة","دراجة","نافذة",
+    "قطة","كلب","سمكة","طيور","سماء","حصان","نهر","سفينة","صاروخ","مدرسة",
+    "مطبخ","حديقة","قارب","جسر","شارع","مفتاح","باب","راديو","دبابة","تمساح",
+    "نظارة","هلال","بركان","جوال","طاولة","مكتبة","مدينة","مطار","قطار","جريدة",
+    "شباك","خيمة","مطر","ثعلب","ذئب","سلحفاة","نحلة","فيل","أسد","نمر",
+    "باندا","زرافة","تماسيح","قرش","سمك","مطارق","مقص","سكاكين","معجون","فرشاة",
+    "سيارة سباق","كرة قدم","شطرنج","باص","مكواة","مروحة","ساعة","كاميرا","دب","سلطان",
+    "خبز","زيت","سكر","ملح","جبن","لحم","حليب","بيض","برتقال","تفاح",
+    "وردة","عنب","خوخ","كرز","بطيخ","شمام","موز","أناناس","فراولة",
+    "كوب","معلقة","شوكة","سكين","طبق","مقلاة","فرن","ثلاجة","غسالة","مروحة",
+    "مصباح","كهرباء","بطارية","هاتف ذكي","حاسوب محمول","تابلت","كاميرا رقمية","ميكروفون","سماعة","مكبر صوت",
+    "كتاب مقدس","جريدة قديمة","مذكرة","دفتر","قلم رصاص","قلم حبر","مسطرة","ممحاة","علبة ألوان","لوحة فنية",
+    "بحيرة","شلال","غابة","وادي","كهف","شاطئ","مرج",
+    "حذاء","قميص","بنطال","جاكيت","قبعة","نظارة شمس","ساعة يد","حزام","حقيبة","مظلة"
+  ];
+
+  // متغيرات اللعبة
+  let board = [];
+  let turn = 'red'; // الأحمر يبدأ
+  let redLeft = 9;
+  let blueLeft = 8;
+  let gameEnded = false;
+  let roomId = null;
+
+  // عناصر DOM
+  const newGameBtn = document.getElementById('newGameBtn');
+  const linkBox = document.getElementById('linkBox');
+  const setupDiv = document.getElementById('setup');
+  const gameDiv = document.getElementById('game');
+  const statusDiv = document.getElementById('status');
+  const boardDiv = document.getElementById('board');
+  const restartBtn = document.getElementById('restartBtn');
+  const backBtn = document.getElementById('backBtn');
+
+  // توليد ID عشوائي للروم
+  function generateRoomId() {
+    return Math.random().toString(36).substring(2, 10);
+  }
+
+  // خلط مصفوفة
+  function shuffle(array) {
+    for(let i=array.length-1; i>0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // توليد الكلمات مع الأنواع
+  function generateBoard() {
+    const shuffledWords = shuffle([...wordsPool]).slice(0, 25);
+
+    let types = [];
+    for(let i=0; i<9; i++) types.push('red');
+    for(let i=0; i<8; i++) types.push('blue');
+    for(let i=0; i<7; i++) types.push('neutral');
+    types.push('assassin');
+    shuffle(types);
+
+    board = [];
+    for(let i=0; i<25; i++) {
+      board.push({
+        word: shuffledWords[i],
+        type: types[i],
+        revealed: false
+      });
+    }
+  }
+
+  // حفظ حالة الروم في localStorage
+  function saveRoom() {
+    if (!roomId) return;
+    const roomData = {
+      board,
+      turn,
+      redLeft,
+      blueLeft,
+      gameEnded
+    };
+    localStorage.setItem('codenames_room_' + roomId, JSON.stringify(roomData));
+  }
+
+  // تحميل حالة الروم من localStorage
+  function loadRoom(id) {
+    const data = localStorage.getItem('codenames_room_' + id);
+    if (!data) return false;
+    try {
+      const obj = JSON.parse(data);
+      board = obj.board;
+      turn = obj.turn;
+      redLeft = obj.redLeft;
+      blueLeft = obj.blueLeft;
+      gameEnded = obj.gameEnded;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // عرض الكلمات
+  function renderBoard() {
+    boardDiv.innerHTML = '';
+    board.forEach((card, i) => {
+      const div = document.createElement('div');
+      div.classList.add('card');
+      if (card.revealed) {
+        div.classList.add('revealed', card.type);
+      }
+      div.textContent = card.word;
+      div.onclick = () => {
+        if (gameEnded) return;
+        if (card.revealed) return;
+
+        card.revealed = true;
+        updateCounts(card.type);
+        if(card.type === 'assassin') {
+          gameEnded = true;
+          alert(`خسر الفريق ${turn.toUpperCase()} لأن كشف الكلمة القاتلة!`);
+          statusDiv.textContent = `انتهت اللعبة. الفريق ${turn.toUpperCase()} خسر!`;
+          saveRoom();
+          return;
+        }
+        renderBoard();
+      };
+      boardDiv.appendChild(div);
+    });
+  }
+
+  // تحديث العدادات والدور
+  function updateCounts(clickedType) {
+    if (clickedType === 'red') {
+      redLeft--;
+      if (redLeft === 0) {
+        gameEnded = true;
+        alert("الفريق الأحمر فاز! مبروك!");
+        statusDiv.textContent = "انتهت اللعبة. الفريق الأحمر فاز!";
+        saveRoom();
+        return;
+      }
+    } else if (clickedType === 'blue') {
+      blueLeft--;
+      if (blueLeft === 0) {
+        gameEnded = true;
+        alert("الفريق الأزرق فاز! مبروك!");
+        statusDiv.textContent = "انتهت اللعبة. الفريق الأزرق فاز!";
+        saveRoom();
+        return;
+      }
+    }
+    // اذا الفريق ضغط على كلمة غير فريقه، ينتقل الدور للفريق الثاني
+    if (clickedType !== turn && clickedType !== 'neutral' && clickedType !== 'assassin') {
+      turn = turn === 'red' ? 'blue' : 'red';
+    }
+    updateStatus();
+    saveRoom();
+  }
+
+  function updateStatus() {
+    statusDiv.textContent = `دور الفريق: ${turn === 'red' ? 'الأحمر 🔴' : 'الأزرق 🔵'} - كلمات الأحمر المتبقية: ${redLeft} - كلمات الأزرق المتبقية: ${blueLeft}`;
+  }
+
+  // إنشاء لعبة جديدة ورقم روم جديد
+  function newGame() {
+    roomId = generateRoomId();
+    generateBoard();
+    turn = 'red';
+    redLeft = 9;
+    blueLeft = 8;
+    gameEnded = false;
+    saveRoom();
+
+    // شارك الرابط مع الروم
+    const url = window.location.origin + window.location.pathname + '?room=' + roomId;
+    linkBox.style.display = 'block';
+    linkBox.textContent = 'شارك هذا الرابط مع ربعك للانضمام للعبة:\n' + url;
+
+    setupDiv.style.display = 'none';
+    gameDiv.style.display = 'block';
+
+    renderBoard();
+    updateStatus();
+    history.replaceState(null, '', '?room=' + roomId);
+  }
+
+  // تحميل لعبة موجودة من URL
+  function loadGameFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('room');
+    if (id) {
+      const loaded = loadRoom(id);
+      if (loaded) {
+        roomId = id;
+        setupDiv.style.display = 'none';
+        gameDiv.style.display = 'block';
+        linkBox.style.display = 'block';
+        const url = window.location.origin + window.location.pathname + '?room=' + roomId;
+        linkBox.textContent = 'شارك هذا الرابط مع ربعك للانضمام للعبة:\n' + url;
+        renderBoard();
+        updateStatus();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // إعادة تشغيل نفس الروم (نفس الكلمات، إعادة تعيين)
+  function restartGame() {
+    if (!roomId) return;
+    generateBoard();
+    turn = 'red';
+    redLeft = 9;
+    blueLeft = 8;
+    gameEnded = false;
+    saveRoom();
+    renderBoard();
+    updateStatus();
+  }
+
+  // زر الرجوع للصفحة الرئيسية
+  function backToSetup() {
+    roomId = null;
+    setupDiv.style.display = 'block';
+    gameDiv.style.display = 'none';
+    linkBox.style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  // الأحداث
+  newGameBtn.onclick = newGame;
+  restartBtn.onclick = restartGame;
+  backBtn.onclick = backToSetup;
+
+  // اذا فيه روم في الرابط نحمّلها
+  window.onload = () => {
+    if(!loadGameFromUrl()) {
+      setupDiv.style.display = 'block';
+    }
+  };
+</script>
+
+</body>
+</html>
