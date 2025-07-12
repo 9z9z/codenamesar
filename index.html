@@ -13,7 +13,7 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 100%);
       min-height: 100vh;
       color: #fff;
       overflow-x: hidden;
@@ -36,7 +36,7 @@
       font-weight: 700;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       margin-bottom: 0.5rem;
-      background: linear-gradient(45deg, #fff, #f0f0f0);
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -45,6 +45,7 @@
     .header p {
       font-size: 1.2rem;
       opacity: 0.9;
+      margin-top: 10px;
     }
 
     .game-container {
@@ -55,12 +56,12 @@
     }
 
     .main-game {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 2rem;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
 
     .sidebar {
@@ -70,29 +71,31 @@
     }
 
     .panel {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 1.5rem;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
 
     .panel h3 {
       margin-bottom: 1rem;
-      color: #fff;
+      color: #ffd700;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+      padding-bottom: 10px;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .form-group label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
-      color: #fff;
+      color: #ffd700;
     }
 
     .form-group input, .form-group select {
@@ -104,31 +107,33 @@
       color: #333;
       font-size: 1rem;
       transition: all 0.3s ease;
+      border: 2px solid transparent;
     }
 
     .form-group input:focus, .form-group select:focus {
       outline: none;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+      border-color: #ffd700;
     }
 
     .btn {
       padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 10px;
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background: linear-gradient(45deg, #ff8c00, #ff4500);
       color: white;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-transform: uppercase;
       letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
 
     .btn:active {
@@ -136,15 +141,15 @@
     }
 
     .btn-primary {
-      background: linear-gradient(45deg, #4CAF50, #45a049);
+      background: linear-gradient(45deg, #4CAF50, #2E8B57);
     }
 
     .btn-secondary {
-      background: linear-gradient(45deg, #2196F3, #1976D2);
+      background: linear-gradient(45deg, #2196F3, #1E90FF);
     }
 
     .btn-danger {
-      background: linear-gradient(45deg, #f44336, #d32f2f);
+      background: linear-gradient(45deg, #f44336, #B22222);
     }
 
     .game-board {
@@ -161,8 +166,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: 1rem;
       color: #333;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -170,40 +175,43 @@
       border: 2px solid transparent;
       position: relative;
       overflow: hidden;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
     .card.red {
-      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      background: linear-gradient(135deg, #ff6b6b, #c00000);
       color: white;
       border-color: #ff4757;
     }
 
     .card.blue {
-      background: linear-gradient(135deg, #4834d4, #341f97);
+      background: linear-gradient(135deg, #4834d4, #000080);
       color: white;
       border-color: #3742fa;
     }
 
     .card.neutral {
-      background: linear-gradient(135deg, #a4b0be, #747d8c);
+      background: linear-gradient(135deg, #a4b0be, #556677);
       color: white;
       border-color: #57606f;
     }
 
     .card.assassin {
-      background: linear-gradient(135deg, #2c2c54, #1a1a2e);
+      background: linear-gradient(135deg, #2c2c54, #000000);
       color: #ff3838;
       border-color: #ff3838;
-      box-shadow: 0 0 20px rgba(255, 56, 56, 0.3);
+      box-shadow: 0 0 20px rgba(255, 56, 56, 0.5);
     }
 
     .card.guessed {
-      opacity: 0.6;
+      opacity: 0.7;
       transform: scale(0.95);
       cursor: default;
     }
@@ -213,7 +221,7 @@
       position: absolute;
       top: 5px;
       right: 5px;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       color: #fff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
@@ -224,34 +232,44 @@
       align-items: center;
       margin-bottom: 1rem;
       padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .team-score {
       text-align: center;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      min-width: 120px;
     }
 
     .team-score .score {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
     }
 
     .team-score.red .score {
       color: #ff6b6b;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
 
     .team-score.blue .score {
-      color: #4834d4;
+      color: #6a5acd;
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
     }
 
     .turn-indicator {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      padding: 0.5rem 1rem;
+      padding: 0.8rem 1.5rem;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.2);
+      min-width: 200px;
+      text-align: center;
+      border: 2px solid rgba(255, 215, 0, 0.5);
     }
 
     .chat-container {
@@ -267,18 +285,28 @@
       padding: 1rem;
       overflow-y: auto;
       margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .chat-message {
-      margin-bottom: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 5px;
+      padding: 0.8rem;
+      border-radius: 10px;
       background: rgba(255, 255, 255, 0.1);
+      border-left: 3px solid #ffd700;
     }
 
     .chat-message .username {
       font-weight: 600;
       color: #ffd700;
+      margin-bottom: 3px;
+    }
+
+    .chat-message .time {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-left: 10px;
     }
 
     .chat-input {
@@ -288,40 +316,51 @@
 
     .chat-input input {
       flex: 1;
-      padding: 0.5rem;
+      padding: 0.75rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       background: rgba(255, 255, 255, 0.9);
       color: #333;
+      border: 2px solid transparent;
+    }
+
+    .chat-input input:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
     }
 
     .players-list {
       background: rgba(0, 0, 0, 0.2);
       border-radius: 10px;
       padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .player-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
+      padding: 0.8rem;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 5px;
+      border-radius: 8px;
+      border-left: 3px solid #ffd700;
     }
 
     .player-role {
-      font-size: 0.8rem;
-      padding: 0.2rem 0.5rem;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.6rem;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 215, 0, 0.2);
     }
 
     .controls {
       display: flex;
       gap: 1rem;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .winner-modal {
@@ -330,7 +369,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -338,17 +377,26 @@
     }
 
     .winner-content {
-      background: white;
-      padding: 2rem;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+      padding: 3rem;
       border-radius: 20px;
       text-align: center;
-      color: #333;
-      max-width: 400px;
+      color: white;
+      max-width: 500px;
+      width: 90%;
+      border: 3px solid #ffd700;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
     }
 
     .winner-content h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #ffd700;
+    }
+
+    .winner-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
     }
 
     .hidden {
@@ -358,10 +406,13 @@
     .lobby-screen {
       text-align: center;
       padding: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .lobby-screen .btn {
       margin: 0.5rem;
+      min-width: 200px;
     }
     
     .loading {
@@ -372,10 +423,10 @@
     
     .loading-spinner {
       border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top: 4px solid #fff;
+      border-top: 4px solid #ffd700;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       animation: spin 1s linear infinite;
       margin: 0 auto 1rem;
     }
@@ -383,10 +434,20 @@
     .error-message {
       background: #ff6b6b;
       color: white;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
       text-align: center;
+      font-weight: 600;
+    }
+
+    .room-code-display {
+      font-size: 1.5rem;
+      margin: 15px 0;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 2px dashed #ffd700;
     }
 
     @keyframes fadeInDown {
@@ -418,7 +479,7 @@
     }
 
     .card.highlight {
-      animation: pulse 0.5s ease-in-out;
+      animation: pulse 0.5s ease-in-out 2;
     }
 
     @media (max-width: 768px) {
@@ -427,20 +488,30 @@
       }
       
       .header h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
       
       .game-board {
         grid-template-columns: repeat(5, 1fr);
-        gap: 5px;
+        gap: 6px;
       }
       
       .card {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        padding: 5px;
       }
       
       .controls {
         flex-direction: column;
+      }
+      
+      .game-info {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .team-score {
+        width: 100%;
       }
     }
   </style>
@@ -453,7 +524,7 @@
   <div class="container">
     <div class="header">
       <h1>🎯 كود نايمز أونلاين</h1>
-      <p>لعبة التخمين والذكاء الجماعية</p>
+      <p>لعبة التخمين والذكاء الجماعية - العب مع أصدقائك في الوقت الحقيقي</p>
     </div>
 
     <!-- Loading Screen -->
@@ -473,7 +544,7 @@
         </div>
         <div class="form-group">
           <label for="roomCode">كود الغرفة:</label>
-          <input type="text" id="roomCode" placeholder="أدخل كود الغرفة" value="ABCD12">
+          <input type="text" id="roomCode" placeholder="أدخل كود الغرفة">
         </div>
         <div class="form-group">
           <label for="playerRole">دورك في اللعبة:</label>
@@ -486,6 +557,7 @@
         </div>
         <button class="btn btn-primary" id="joinGameBtn">انضم إلى اللعبة</button>
         <button class="btn btn-secondary" id="createRoomBtn">إنشاء غرفة جديدة</button>
+        <div id="roomCodeDisplay" class="room-code-display hidden"></div>
       </div>
     </div>
 
@@ -525,7 +597,7 @@
 
       <div class="sidebar">
         <div class="panel">
-          <h3>اللاعبون</h3>
+          <h3>اللاعبون (<span id="playersCount">0</span>)</h3>
           <div class="players-list" id="playersList">
             <!-- Players will be listed here -->
           </div>
@@ -550,9 +622,11 @@
     <div id="winnerModal" class="winner-modal hidden">
       <div class="winner-content">
         <h2 id="winnerText">🎉 الفريق الأحمر يفوز!</h2>
-        <p>تهانينا على الفوز!</p>
-        <button class="btn btn-primary" id="closeWinnerBtn">إغلاق</button>
-        <button class="btn btn-secondary" id="newGameModalBtn">لعبة جديدة</button>
+        <p>تهانينا على الفوز! لقد أثبتم مهارتكم في التخمين والاستراتيجية</p>
+        <div class="controls" style="justify-content: center; margin-top: 30px;">
+          <button class="btn btn-primary" id="closeWinnerBtn">إغلاق</button>
+          <button class="btn btn-secondary" id="newGameModalBtn">لعبة جديدة</button>
+        </div>
       </div>
     </div>
   </div>
@@ -591,13 +665,20 @@
     let spymasterMode = false;
 
     // Sample Arabic words for the game
-    const arabicWords = [
-      'شمس', 'قمر', 'نجم', 'بحر', 'جبل', 'نهر', 'شجرة', 'وردة', 'طائر', 'قط',
-      'كلب', 'حصان', 'سيارة', 'طائرة', 'قطار', 'بيت', 'مدرسة', 'مسجد', 'مكتبة', 'سوق',
-      'طبيب', 'مهندس', 'معلم', 'طباخ', 'رسام', 'كتاب', 'قلم', 'ورقة', 'حاسوب', 'هاتف',
-      'تلفاز', 'راديو', 'موسيقى', 'فيلم', 'لعبة', 'كرة', 'ملعب', 'حديقة', 'مقهى', 'مطعم',
-      'خبز', 'ماء', 'شاي', 'قهوة', 'عسل', 'تفاح', 'برتقال', 'موز', 'عنب', 'فراولة'
-    ];
+const arabicWords = [
+  'شمس', 'قمر', 'نجم', 'بحر', 'جبل', 'نهر', 'شجرة', 'وردة', 'طائر', 'قط',
+  'كلب', 'حصان', 'سيارة', 'طائرة', 'قطار', 'بيت', 'مدرسة', 'مسجد', 'مكتبة', 'سوق',
+  'طبيب', 'مهندس', 'معلم', 'طباخ', 'رسام', 'كتاب', 'قلم', 'ورقة', 'حاسوب', 'هاتف',
+  'تلفاز', 'راديو', 'موسيقى', 'فيلم', 'لعبة', 'كرة', 'ملعب', 'حديقة', 'مقهى', 'مطعم',
+  'خبز', 'ماء', 'شاي', 'قهوة', 'عسل', 'تفاح', 'برتقال', 'موز', 'عنب', 'فراولة',
+  'قصر', 'مدينة', 'قرية', 'شاطئ', 'نار', 'ريح', 'ثلج', 'غيمة', 'صقر', 'نمر',
+  'فيل', 'دب', 'قطة', 'حصان', 'بحيرة', 'بركان', 'صحراء', 'غابة', 'زرع', 'حصى',
+  'لؤلؤ', 'مطر', 'كهرباء', 'ذهب', 'فضة', 'برق', 'ريشة', 'قوس', 'نهر', 'صخرة',
+  'قارب', 'سفينة', 'هلال', 'سحاب', 'طوفان', 'موجة', 'كنز', 'خاتم', 'سيف', 'دراجة',
+  'مروحة', 'بوابة', 'مظلة', 'مصباح', 'مرآة', 'مفتاح', 'ساعة', 'قميص', 'بنطال', 'حذاء',
+  'نظارة', 'قبعة', 'حقيبة', 'لوحة', 'قهوة', 'شوكولاتة', 'مطرقة', 'منشار', 'مسمار', 'برغي',
+  'قلم رصاص', 'ممحاة', 'دفتر', 'حبل', 'مفتاح سيارة', 'كاميرا', 'ميكروفون', 'مكبر صوت'
+];
 
     // DOM Elements
     const elements = {
@@ -624,7 +705,9 @@
       newGameModalBtn: document.getElementById('newGameModalBtn'),
       closeWinnerBtn: document.getElementById('closeWinnerBtn'),
       sendMessageBtn: document.getElementById('sendMessageBtn'),
-      chatInput: document.getElementById('chatInput')
+      chatInput: document.getElementById('chatInput'),
+      roomCodeDisplay: document.getElementById('roomCodeDisplay'),
+      playersCount: document.getElementById('playersCount')
     };
 
     // Initialize Firebase and game
@@ -652,6 +735,11 @@
           gameState.winner = state.winner || null;
           
           updateDisplay();
+          
+          // Show winner if exists
+          if (gameState.winner) {
+            showWinner();
+          }
         }
       });
       
@@ -661,6 +749,7 @@
         if (players) {
           gameState.players = players;
           updatePlayersList();
+          elements.playersCount.textContent = Object.keys(players).length;
         }
       });
       
@@ -756,6 +845,10 @@
         type: gameState.playerRole.includes('spy') ? 'spy' : 'field'
       };
       
+      // Show room code
+      elements.roomCodeDisplay.textContent = `كود الغرفة: ${roomCode}`;
+      elements.roomCodeDisplay.classList.remove('hidden');
+      
       // Initialize room in Firebase
       database.ref(`rooms/${roomCode}`).set({
         created: new Date().toISOString()
@@ -842,6 +935,7 @@
           cardElement.classList.add('guessed', card.color);
         } else if (spymasterMode && isSpymaster()) {
           cardElement.classList.add(card.color);
+          cardElement.style.cursor = 'default';
         } else {
           // Only add click event for unrevealed cards
           cardElement.addEventListener('click', () => selectCard(card.id));
@@ -965,6 +1059,8 @@
     // Update turn indicator
     function updateTurnIndicator() {
       elements.turnIndicator.textContent = `دور الفريق ${gameState.currentTurn === 'red' ? 'الأحمر' : 'الأزرق'}`;
+      elements.turnIndicator.style.backgroundColor = gameState.currentTurn === 'red' ? 
+        'rgba(255, 107, 107, 0.3)' : 'rgba(72, 52, 212, 0.3)';
     }
 
     // Update players list
@@ -981,6 +1077,7 @@
         const roleSpan = document.createElement('span');
         roleSpan.className = 'player-role';
         roleSpan.textContent = `${player.type === 'spy' ? 'رئيس جواسيس' : 'عميل ميداني'} - ${player.team === 'red' ? 'أحمر' : 'أزرق'}`;
+        roleSpan.style.color = player.team === 'red' ? '#ff6b6b' : '#6a5acd';
         
         playerDiv.appendChild(nameSpan);
         playerDiv.appendChild(roleSpan);
@@ -991,6 +1088,7 @@
     // Show winner
     function showWinner() {
       elements.winnerText.textContent = `🎉 الفريق ${gameState.winner === 'red' ? 'الأحمر' : 'الأزرق'} يفوز!`;
+      elements.winnerText.style.color = gameState.winner === 'red' ? '#ff6b6b' : '#6a5acd';
       elements.winnerModal.classList.remove('hidden');
       saveGameState();
     }
@@ -1014,6 +1112,9 @@
       gameState.redScore = 9;
       gameState.blueScore = 8;
       gameState.winner = null;
+      spymasterMode = false;
+      
+      elements.spymasterBtn.textContent = 'تشغيل وضع رئيس الجواسيس';
       
       generateCards();
       saveGameState();
@@ -1049,8 +1150,10 @@
       });
       
       messageDiv.innerHTML = `
-        <span class="username">${sender}</span>
-        <span class="time">${time}</span>
+        <div>
+          <span class="username">${sender}</span>
+          <span class="time">${time}</span>
+        </div>
         <div>${message}</div>
       `;
       
@@ -1097,6 +1200,12 @@
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
       initEventListeners();
+      
+      // Add demo chat messages
+      setTimeout(() => {
+        addChatMessage('النظام', 'مرحباً بكم في لعبة كود نايمز أونلاين!');
+        addChatMessage('النظام', 'انضم إلى غرفة أو أنشئ غرفة جديدة لتبدأ اللعب');
+      }, 500);
     });
   </script>
 </body>
