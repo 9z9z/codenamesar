@@ -3,172 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Codenames Online - كود نايمز</title>
+  <title>كود نايمز أونلاين</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
       background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 100%);
       min-height: 100vh;
       color: #fff;
-      overflow-x: hidden;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-
+    
     .container {
       max-width: 1200px;
+      width: 100%;
       margin: 0 auto;
-      padding: 20px;
     }
-
+    
     .header {
       text-align: center;
-      margin-bottom: 2rem;
-      animation: fadeInDown 0.8s ease-out;
+      margin-bottom: 30px;
+      animation: fadeInDown 1s ease;
     }
-
+    
     .header h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      margin-bottom: 0.5rem;
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
       background: linear-gradient(45deg, #ffd700, #ff8c00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
-
+    
     .header p {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       opacity: 0.9;
-      margin-top: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
     }
-
+    
     .game-container {
       display: grid;
       grid-template-columns: 1fr 350px;
-      gap: 2rem;
-      margin-bottom: 2rem;
+      gap: 25px;
+      margin-bottom: 30px;
     }
-
+    
     .main-game {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     }
-
+    
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 25px;
     }
-
+    
     .panel {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     }
-
+    
     .panel h3 {
-      margin-bottom: 1rem;
+      margin-bottom: 20px;
       color: #ffd700;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-      border-bottom: 2px solid rgba(255, 215, 0, 0.5);
-      padding-bottom: 10px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      border-bottom: 2px solid rgba(255, 215, 0, 0.4);
+      padding-bottom: 12px;
+      font-size: 1.6rem;
     }
-
+    
     .form-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 20px;
     }
-
+    
     .form-group label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 10px;
       font-weight: 600;
       color: #ffd700;
+      font-size: 1.1rem;
     }
-
+    
     .form-group input, .form-group select {
       width: 100%;
-      padding: 0.75rem;
+      padding: 14px;
       border: none;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #222;
+      font-size: 1.1rem;
       transition: all 0.3s ease;
       border: 2px solid transparent;
     }
-
+    
     .form-group input:focus, .form-group select:focus {
       outline: none;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.35);
       border-color: #ffd700;
     }
-
+    
     .btn {
-      padding: 0.75rem 1.5rem;
+      padding: 14px 28px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: linear-gradient(45deg, #ff8c00, #ff4500);
       color: white;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
-
+    
     .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
-
+    
     .btn:active {
       transform: translateY(0);
     }
-
+    
     .btn-primary {
       background: linear-gradient(45deg, #4CAF50, #2E8B57);
     }
-
+    
     .btn-secondary {
       background: linear-gradient(45deg, #2196F3, #1E90FF);
     }
-
+    
     .btn-danger {
       background: linear-gradient(45deg, #f44336, #B22222);
     }
-
+    
     .game-board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin: 2rem 0;
+      gap: 12px;
+      margin: 30px 0;
     }
-
+    
     .card {
-      aspect-ratio: 1.5;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
+      aspect-ratio: 1.4;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 1rem;
-      color: #333;
+      font-size: 1.15rem;
+      color: #222;
       cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
@@ -177,296 +188,312 @@
       overflow: hidden;
       text-align: center;
       padding: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-
+    
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
     }
-
+    
     .card.red {
       background: linear-gradient(135deg, #ff6b6b, #c00000);
       color: white;
       border-color: #ff4757;
     }
-
+    
     .card.blue {
       background: linear-gradient(135deg, #4834d4, #000080);
       color: white;
       border-color: #3742fa;
     }
-
+    
     .card.neutral {
       background: linear-gradient(135deg, #a4b0be, #556677);
       color: white;
       border-color: #57606f;
     }
-
+    
     .card.assassin {
       background: linear-gradient(135deg, #2c2c54, #000000);
       color: #ff3838;
       border-color: #ff3838;
-      box-shadow: 0 0 20px rgba(255, 56, 56, 0.5);
+      box-shadow: 0 0 25px rgba(255, 56, 56, 0.6);
     }
-
+    
     .card.guessed {
       opacity: 0.7;
       transform: scale(0.95);
       cursor: default;
     }
-
+    
     .card.guessed::after {
       content: '✓';
       position: absolute;
-      top: 5px;
-      right: 5px;
-      font-size: 1.5rem;
+      top: 8px;
+      right: 8px;
+      font-size: 1.8rem;
       color: #fff;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      font-weight: bold;
     }
-
+    
     .game-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
-      padding: 1rem;
+      margin-bottom: 20px;
+      padding: 20px;
       background: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
-
+    
     .team-score {
       text-align: center;
-      padding: 10px 20px;
-      border-radius: 10px;
-      background: rgba(0, 0, 0, 0.2);
-      min-width: 120px;
+      padding: 15px 25px;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.25);
+      min-width: 140px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
+    
     .team-score .score {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     }
-
+    
     .team-score.red .score {
       color: #ff6b6b;
-      text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
-
+    
     .team-score.blue .score {
       color: #6a5acd;
-      text-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
     }
-
+    
     .turn-indicator {
-      font-size: 1.3rem;
-      font-weight: 600;
-      padding: 0.8rem 1.5rem;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      min-width: 200px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 15px 30px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.15);
+      min-width: 230px;
       text-align: center;
       border: 2px solid rgba(255, 215, 0, 0.5);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
-
+    
     .chat-container {
-      height: 300px;
+      height: 320px;
       display: flex;
       flex-direction: column;
     }
-
+    
     .chat-messages {
       flex: 1;
       background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 1rem;
+      border-radius: 15px;
+      padding: 15px;
       overflow-y: auto;
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .chat-message {
-      padding: 0.8rem;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border-left: 3px solid #ffd700;
-    }
-
-    .chat-message .username {
-      font-weight: 600;
-      color: #ffd700;
-      margin-bottom: 3px;
-    }
-
-    .chat-message .time {
-      font-size: 0.8rem;
-      opacity: 0.7;
-      margin-left: 10px;
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .chat-input input {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      border: 2px solid transparent;
-    }
-
-    .chat-input input:focus {
-      outline: none;
-      border-color: #ffd700;
-      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
-    }
-
-    .players-list {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 1rem;
+      margin-bottom: 15px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
+    
+    .chat-message {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #ffd700;
+    }
+    
+    .chat-message .username {
+      font-weight: 700;
+      color: #ffd700;
+      margin-bottom: 5px;
+      display: block;
+    }
+    
+    .chat-message .time {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      float: left;
+    }
+    
+    .chat-input {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .chat-input input {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #222;
+      border: 2px solid transparent;
+      font-size: 1.05rem;
+    }
+    
+    .chat-input input:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+    }
+    
+    .players-list {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
     .player-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem;
+      padding: 12px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      border-left: 3px solid #ffd700;
-    }
-
-    .player-role {
-      font-size: 0.85rem;
-      padding: 0.3rem 0.6rem;
       border-radius: 10px;
+      border-left: 4px solid #ffd700;
+    }
+    
+    .player-role {
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: 12px;
       background: rgba(255, 215, 0, 0.2);
     }
-
+    
     .controls {
       display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
+      gap: 15px;
+      margin-top: 25px;
       flex-wrap: wrap;
+      justify-content: center;
     }
-
+    
     .winner-modal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
     }
-
+    
     .winner-content {
       background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-      padding: 3rem;
-      border-radius: 20px;
+      padding: 40px;
+      border-radius: 25px;
       text-align: center;
       color: white;
-      max-width: 500px;
+      max-width: 550px;
       width: 90%;
-      border: 3px solid #ffd700;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      border: 4px solid #ffd700;
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
     }
-
+    
     .winner-content h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
+      font-size: 2.8rem;
+      margin-bottom: 20px;
       color: #ffd700;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
     }
-
+    
     .winner-content p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
     }
-
+    
     .hidden {
       display: none;
     }
-
+    
     .lobby-screen {
       text-align: center;
-      padding: 2rem;
-      max-width: 600px;
+      padding: 30px;
+      max-width: 650px;
       margin: 0 auto;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     }
-
+    
     .lobby-screen .btn {
-      margin: 0.5rem;
-      min-width: 200px;
+      margin: 15px;
+      min-width: 240px;
+      padding: 16px;
     }
     
     .loading {
       text-align: center;
-      padding: 2rem;
-      font-size: 1.2rem;
+      padding: 30px;
+      font-size: 1.3rem;
     }
     
     .loading-spinner {
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top: 4px solid #ffd700;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top: 5px solid #ffd700;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
+      margin: 0 auto 20px;
     }
     
     .error-message {
       background: #ff6b6b;
       color: white;
-      padding: 12px;
-      border-radius: 8px;
-      margin: 15px 0;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .room-code-display {
-      font-size: 1.5rem;
-      margin: 15px 0;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
       border-radius: 10px;
-      border: 2px dashed #ffd700;
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
-
+    
+    .room-code-display {
+      font-size: 1.7rem;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      border: 3px dashed #ffd700;
+      font-weight: 700;
+    }
+    
     @keyframes fadeInDown {
       from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-40px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-
+    
     @keyframes pulse {
       0% {
         transform: scale(1);
       }
       50% {
-        transform: scale(1.05);
+        transform: scale(1.08);
       }
       100% {
         transform: scale(1);
@@ -477,28 +504,28 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
+    
     .card.highlight {
       animation: pulse 0.5s ease-in-out 2;
     }
-
-    @media (max-width: 768px) {
+    
+    @media (max-width: 992px) {
       .game-container {
         grid-template-columns: 1fr;
       }
       
       .header h1 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
       }
       
       .game-board {
         grid-template-columns: repeat(5, 1fr);
-        gap: 6px;
+        gap: 8px;
       }
       
       .card {
-        font-size: 0.85rem;
-        padding: 5px;
+        font-size: 1rem;
+        padding: 8px;
       }
       
       .controls {
@@ -507,10 +534,33 @@
       
       .game-info {
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
       }
       
       .team-score {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .header p {
+        font-size: 1.1rem;
+      }
+      
+      .game-board {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .card {
+        aspect-ratio: 1.3;
+        font-size: 0.9rem;
+      }
+      
+      .btn {
         width: 100%;
       }
     }
@@ -524,7 +574,7 @@
   <div class="container">
     <div class="header">
       <h1>🎯 كود نايمز أونلاين</h1>
-      <p>لعبة التخمين والذكاء الجماعية - العب مع أصدقائك في الوقت الحقيقي</p>
+      <p>لعبة التخمين والاستراتيجية الجماعية - العب مع أصدقائك في الوقت الحقيقي</p>
     </div>
 
     <!-- Loading Screen -->
@@ -584,13 +634,13 @@
         
         <div class="controls">
           <button class="btn btn-secondary" id="spymasterBtn">
-            تشغيل وضع رئيس الجواسيس
+            <span>👁️</span> تشغيل وضع رئيس الجواسيس
           </button>
           <button class="btn btn-danger" id="passTurnBtn">
-            تمرير الدور
+            <span>➡️</span> تمرير الدور
           </button>
           <button class="btn btn-primary" id="newGameBtn">
-            لعبة جديدة
+            <span>🔄</span> لعبة جديدة
           </button>
         </div>
       </div>
@@ -665,20 +715,13 @@
     let spymasterMode = false;
 
     // Sample Arabic words for the game
-const arabicWords = [
-  'شمس', 'قمر', 'نجم', 'بحر', 'جبل', 'نهر', 'شجرة', 'وردة', 'طائر', 'قط',
-  'كلب', 'حصان', 'سيارة', 'طائرة', 'قطار', 'بيت', 'مدرسة', 'مسجد', 'مكتبة', 'سوق',
-  'طبيب', 'مهندس', 'معلم', 'طباخ', 'رسام', 'كتاب', 'قلم', 'ورقة', 'حاسوب', 'هاتف',
-  'تلفاز', 'راديو', 'موسيقى', 'فيلم', 'لعبة', 'كرة', 'ملعب', 'حديقة', 'مقهى', 'مطعم',
-  'خبز', 'ماء', 'شاي', 'قهوة', 'عسل', 'تفاح', 'برتقال', 'موز', 'عنب', 'فراولة',
-  'قصر', 'مدينة', 'قرية', 'شاطئ', 'نار', 'ريح', 'ثلج', 'غيمة', 'صقر', 'نمر',
-  'فيل', 'دب', 'قطة', 'حصان', 'بحيرة', 'بركان', 'صحراء', 'غابة', 'زرع', 'حصى',
-  'لؤلؤ', 'مطر', 'كهرباء', 'ذهب', 'فضة', 'برق', 'ريشة', 'قوس', 'نهر', 'صخرة',
-  'قارب', 'سفينة', 'هلال', 'سحاب', 'طوفان', 'موجة', 'كنز', 'خاتم', 'سيف', 'دراجة',
-  'مروحة', 'بوابة', 'مظلة', 'مصباح', 'مرآة', 'مفتاح', 'ساعة', 'قميص', 'بنطال', 'حذاء',
-  'نظارة', 'قبعة', 'حقيبة', 'لوحة', 'قهوة', 'شوكولاتة', 'مطرقة', 'منشار', 'مسمار', 'برغي',
-  'قلم رصاص', 'ممحاة', 'دفتر', 'حبل', 'مفتاح سيارة', 'كاميرا', 'ميكروفون', 'مكبر صوت'
-];
+    const arabicWords = [
+      'شمس', 'قمر', 'نجم', 'بحر', 'جبل', 'نهر', 'شجرة', 'وردة', 'طائر', 'قط',
+      'كلب', 'حصان', 'سيارة', 'طائرة', 'قطار', 'بيت', 'مدرسة', 'مسجد', 'مكتبة', 'سوق',
+      'طبيب', 'مهندس', 'معلم', 'طباخ', 'رسام', 'كتاب', 'قلم', 'ورقة', 'حاسوب', 'هاتف',
+      'تلفاز', 'راديو', 'موسيقى', 'فيلم', 'لعبة', 'كرة', 'ملعب', 'حديقة', 'مقهى', 'مطعم',
+      'خبز', 'ماء', 'شاي', 'قهوة', 'عسل', 'تفاح', 'برتقال', 'موز', 'عنب', 'فراولة'
+    ];
 
     // DOM Elements
     const elements = {
@@ -1023,8 +1066,8 @@ const arabicWords = [
 
       spymasterMode = !spymasterMode;
       elements.spymasterBtn.textContent = spymasterMode ? 
-        'إيقاف وضع رئيس الجواسيس' : 
-        'تشغيل وضع رئيس الجواسيس';
+        '👁️ إيقاف وضع رئيس الجواسيس' : 
+        '👁️ تشغيل وضع رئيس الجواسيس';
       
       updateBoard();
     }
@@ -1114,7 +1157,7 @@ const arabicWords = [
       gameState.winner = null;
       spymasterMode = false;
       
-      elements.spymasterBtn.textContent = 'تشغيل وضع رئيس الجواسيس';
+      elements.spymasterBtn.textContent = '👁️ تشغيل وضع رئيس الجواسيس';
       
       generateCards();
       saveGameState();
@@ -1166,7 +1209,7 @@ const arabicWords = [
       elements.errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
       setTimeout(() => {
         elements.errorContainer.innerHTML = '';
-      }, 3000);
+      }, 4000);
     }
 
     // Show loading screen
