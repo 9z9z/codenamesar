@@ -379,6 +379,15 @@
       animation: spin 1s linear infinite;
       margin: 0 auto 1rem;
     }
+    
+    .error-message {
+      background: #ff6b6b;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      text-align: center;
+    }
 
     @keyframes fadeInDown {
       from {
@@ -429,6 +438,10 @@
       .card {
         font-size: 0.8rem;
       }
+      
+      .controls {
+        flex-direction: column;
+      }
     }
   </style>
   
@@ -453,13 +466,14 @@
     <div id="lobbyScreen" class="lobby-screen">
       <div class="panel">
         <h3>انضم إلى اللعبة</h3>
+        <div id="errorContainer"></div>
         <div class="form-group">
           <label for="playerName">اسم اللاعب:</label>
-          <input type="text" id="playerName" placeholder="أدخل اسمك">
+          <input type="text" id="playerName" placeholder="أدخل اسمك" value="اللاعب">
         </div>
         <div class="form-group">
           <label for="roomCode">كود الغرفة:</label>
-          <input type="text" id="roomCode" placeholder="أدخل كود الغرفة">
+          <input type="text" id="roomCode" placeholder="أدخل كود الغرفة" value="ABCD12">
         </div>
         <div class="form-group">
           <label for="playerRole">دورك في اللعبة:</label>
@@ -497,13 +511,13 @@
         </div>
         
         <div class="controls">
-          <button class="btn btn-secondary" id="spymasterBtn" onclick="toggleSpymaster()">
+          <button class="btn btn-secondary" id="spymasterBtn">
             تشغيل وضع رئيس الجواسيس
           </button>
-          <button class="btn btn-danger" id="passTurnBtn" onclick="passTurn()">
+          <button class="btn btn-danger" id="passTurnBtn">
             تمرير الدور
           </button>
-          <button class="btn btn-primary" id="newGameBtn" onclick="newGame()">
+          <button class="btn btn-primary" id="newGameBtn">
             لعبة جديدة
           </button>
         </div>
@@ -525,7 +539,7 @@
             </div>
             <div class="chat-input">
               <input type="text" id="chatInput" placeholder="اكتب رسالة...">
-              <button class="btn" id="sendMessageBtn" onclick="sendMessage()">إرسال</button>
+              <button class="btn" id="sendMessageBtn">إرسال</button>
             </div>
           </div>
         </div>
@@ -537,8 +551,8 @@
       <div class="winner-content">
         <h2 id="winnerText">🎉 الفريق الأحمر يفوز!</h2>
         <p>تهانينا على الفوز!</p>
-        <button class="btn btn-primary" onclick="closeWinnerModal()">إغلاق</button>
-        <button class="btn btn-secondary" onclick="newGame()">لعبة جديدة</button>
+        <button class="btn btn-primary" id="closeWinnerBtn">إغلاق</button>
+        <button class="btn btn-secondary" id="newGameModalBtn">لعبة جديدة</button>
       </div>
     </div>
   </div>
@@ -566,11 +580,15 @@
       redScore: 9,
       blueScore: 8,
       winner: null,
-      spymasterMode: false,
       currentPlayer: null,
       roomCode: null,
-      playerId: null
+      playerId: null,
+      playerRole: null,
+      isRoomCreator: false
     };
+
+    // Local state for spymaster mode
+    let spymasterMode = false;
 
     // Sample Arabic words for the game
     const arabicWords = [
@@ -580,6 +598,34 @@
       'تلفاز', 'راديو', 'موسيقى', 'فيلم', 'لعبة', 'كرة', 'ملعب', 'حديقة', 'مقهى', 'مطعم',
       'خبز', 'ماء', 'شاي', 'قهوة', 'عسل', 'تفاح', 'برتقال', 'موز', 'عنب', 'فراولة'
     ];
+
+    // DOM Elements
+    const elements = {
+      lobbyScreen: document.getElementById('lobbyScreen'),
+      gameScreen: document.getElementById('gameScreen'),
+      loadingScreen: document.getElementById('loadingScreen'),
+      winnerModal: document.getElementById('winnerModal'),
+      gameBoard: document.getElementById('gameBoard'),
+      playersList: document.getElementById('playersList'),
+      chatMessages: document.getElementById('chatMessages'),
+      playerName: document.getElementById('playerName'),
+      roomCode: document.getElementById('roomCode'),
+      playerRole: document.getElementById('playerRole'),
+      redScore: document.getElementById('redScore'),
+      blueScore: document.getElementById('blueScore'),
+      turnIndicator: document.getElementById('turnIndicator'),
+      winnerText: document.getElementById('winnerText'),
+      errorContainer: document.getElementById('errorContainer'),
+      createRoomBtn: document.getElementById('createRoomBtn'),
+      joinGameBtn: document.getElementById('joinGameBtn'),
+      spymasterBtn: document.getElementById('spymasterBtn'),
+      passTurnBtn: document.getElementById('passTurnBtn'),
+      newGameBtn: document.getElementById('newGameBtn'),
+      newGameModalBtn: document.getElementById('newGameModalBtn'),
+      closeWinnerBtn: document.getElementById('closeWinnerBtn'),
+      sendMessageBtn: document.getElementById('sendMessageBtn'),
+      chatInput: document.getElementById('chatInput')
+    };
 
     // Initialize Firebase and game
     function initializeGame() {
@@ -637,10 +683,12 @@
     // Generate random cards
     function generateCards() {
       const shuffledWords = [...arabicWords].sort(() => 0.5 - Math.random()).slice(0, 25);
-      const colors = ['red', 'red', 'red', 'red', 'red', 'red', 'red', 'red', 'red',
-                     'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue',
-                     'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
-                     'assassin'];
+      const colors = [
+        'red', 'red', 'red', 'red', 'red', 'red', 'red', 'red', 'red',
+        'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue',
+        'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
+        'assassin'
+      ];
       
       // Shuffle colors
       for (let i = colors.length - 1; i > 0; i--) {
@@ -685,49 +733,57 @@
 
     // Create room
     function createRoom() {
-      const playerName = document.getElementById('playerName').value.trim();
+      const playerName = elements.playerName.value.trim();
       if (!playerName) {
-        alert('يرجى إدخال اسم اللاعب');
+        showError('يرجى إدخال اسم اللاعب');
         return;
       }
       
       showLoading();
       
       const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      document.getElementById('roomCode').value = roomCode;
+      elements.roomCode.value = roomCode;
       gameState.roomCode = roomCode;
       gameState.currentPlayer = playerName;
-      gameState.playerRole = document.getElementById('playerRole').value;
+      gameState.playerRole = elements.playerRole.value;
       gameState.isRoomCreator = true;
+      
+      // Set current player locally
+      gameState.players[gameState.playerId] = {
+        name: gameState.currentPlayer,
+        role: gameState.playerRole,
+        team: gameState.playerRole.includes('red') ? 'red' : 'blue',
+        type: gameState.playerRole.includes('spy') ? 'spy' : 'field'
+      };
       
       // Initialize room in Firebase
       database.ref(`rooms/${roomCode}`).set({
         created: new Date().toISOString()
       }).then(() => {
         savePlayerState();
-        document.getElementById('lobbyScreen').classList.add('hidden');
-        document.getElementById('gameScreen').classList.remove('hidden');
+        elements.lobbyScreen.classList.add('hidden');
+        elements.gameScreen.classList.remove('hidden');
         initializeGame();
       }).catch((error) => {
         console.error("Error creating room: ", error);
         hideLoading();
-        alert('حدث خطأ أثناء إنشاء الغرفة');
+        showError('حدث خطأ أثناء إنشاء الغرفة');
       });
     }
 
     // Join game
     function joinGame() {
-      const playerName = document.getElementById('playerName').value.trim();
-      const roomCode = document.getElementById('roomCode').value.trim().toUpperCase();
-      const playerRole = document.getElementById('playerRole').value;
+      const playerName = elements.playerName.value.trim();
+      const roomCode = elements.roomCode.value.trim().toUpperCase();
+      const playerRole = elements.playerRole.value;
 
       if (!playerName) {
-        alert('يرجى إدخال اسم اللاعب');
+        showError('يرجى إدخال اسم اللاعب');
         return;
       }
       
       if (!roomCode) {
-        alert('يرجى إدخال كود الغرفة');
+        showError('يرجى إدخال كود الغرفة');
         return;
       }
       
@@ -741,18 +797,26 @@
           gameState.playerRole = playerRole;
           gameState.isRoomCreator = false;
           
+          // Set current player locally
+          gameState.players[gameState.playerId] = {
+            name: gameState.currentPlayer,
+            role: gameState.playerRole,
+            team: gameState.playerRole.includes('red') ? 'red' : 'blue',
+            type: gameState.playerRole.includes('spy') ? 'spy' : 'field'
+          };
+          
           savePlayerState();
-          document.getElementById('lobbyScreen').classList.add('hidden');
-          document.getElementById('gameScreen').classList.remove('hidden');
+          elements.lobbyScreen.classList.add('hidden');
+          elements.gameScreen.classList.remove('hidden');
           initializeGame();
         } else {
           hideLoading();
-          alert('كود الغرفة غير صحيح!');
+          showError('كود الغرفة غير صحيح!');
         }
       }).catch((error) => {
         console.error("Error joining room: ", error);
         hideLoading();
-        alert('حدث خطأ أثناء الانضمام للغرفة');
+        showError('حدث خطأ أثناء الانضمام للغرفة');
       });
     }
 
@@ -766,22 +830,24 @@
 
     // Update game board
     function updateBoard() {
-      const board = document.getElementById('gameBoard');
-      board.innerHTML = '';
+      elements.gameBoard.innerHTML = '';
 
       gameState.cards.forEach(card => {
         const cardElement = document.createElement('div');
         cardElement.className = 'card';
         cardElement.textContent = card.word;
-        cardElement.onclick = () => selectCard(card.id);
+        cardElement.dataset.id = card.id;
 
         if (card.revealed) {
           cardElement.classList.add('guessed', card.color);
-        } else if (gameState.spymasterMode && isSpymaster()) {
+        } else if (spymasterMode && isSpymaster()) {
           cardElement.classList.add(card.color);
+        } else {
+          // Only add click event for unrevealed cards
+          cardElement.addEventListener('click', () => selectCard(card.id));
         }
 
-        board.appendChild(cardElement);
+        elements.gameBoard.appendChild(cardElement);
       });
     }
 
@@ -795,21 +861,23 @@
 
       // Only field operatives can select cards
       if (currentPlayer.type === 'spy') {
-        alert('رئيس الجواسيس لا يمكنه اختيار البطاقات');
+        showError('رئيس الجواسيس لا يمكنه اختيار البطاقات');
         return;
       }
 
       // Check if it's the player's team turn
       if (currentPlayer.team !== gameState.currentTurn) {
-        alert('ليس دور فريقك');
+        showError('ليس دور فريقك');
         return;
       }
 
       card.revealed = true;
       
       // Add highlight effect
-      const cardElement = document.querySelectorAll('.card')[cardId];
-      cardElement.classList.add('highlight');
+      const cardElement = document.querySelector(`.card[data-id="${cardId}"]`);
+      if (cardElement) {
+        cardElement.classList.add('highlight');
+      }
 
       // Check card type and handle accordingly
       if (card.color === 'assassin') {
@@ -849,34 +917,21 @@
       saveGameState();
     }
 
-    // Pass turn
-    function passTurn() {
-      const currentPlayer = gameState.players[gameState.playerId];
-      if (!currentPlayer) return;
-
-      if (currentPlayer.team !== gameState.currentTurn) {
-        alert('ليس دور فريقك');
-        return;
-      }
-
-      switchTurn();
-      addChatMessage('النظام', `${currentPlayer.name} مرر الدور`);
-      updateDisplay();
-    }
-
     // Toggle spymaster mode
     function toggleSpymaster() {
       const currentPlayer = gameState.players[gameState.playerId];
       if (!currentPlayer) return;
 
       if (currentPlayer.type !== 'spy') {
-        alert('فقط رئيس الجواسيس يمكنه استخدام هذا الوضع');
+        showError('فقط رئيس الجواسيس يمكنه استخدام هذا الوضع');
         return;
       }
 
-      gameState.spymasterMode = !gameState.spymasterMode;
-      const btn = document.getElementById('spymasterBtn');
-      btn.textContent = gameState.spymasterMode ? 'إيقاف وضع رئيس الجواسيس' : 'تشغيل وضع رئيس الجواسيس';
+      spymasterMode = !spymasterMode;
+      elements.spymasterBtn.textContent = spymasterMode ? 
+        'إيقاف وضع رئيس الجواسيس' : 
+        'تشغيل وضع رئيس الجواسيس';
+      
       updateBoard();
     }
 
@@ -886,22 +941,35 @@
       return currentPlayer && currentPlayer.type === 'spy';
     }
 
+    // Pass turn
+    function passTurn() {
+      const currentPlayer = gameState.players[gameState.playerId];
+      if (!currentPlayer) return;
+
+      if (currentPlayer.team !== gameState.currentTurn) {
+        showError('ليس دور فريقك');
+        return;
+      }
+
+      switchTurn();
+      addChatMessage('النظام', `${currentPlayer.name} مرر الدور`);
+      updateDisplay();
+    }
+
     // Update scores
     function updateScores() {
-      document.getElementById('redScore').textContent = gameState.redScore;
-      document.getElementById('blueScore').textContent = gameState.blueScore;
+      elements.redScore.textContent = gameState.redScore;
+      elements.blueScore.textContent = gameState.blueScore;
     }
 
     // Update turn indicator
     function updateTurnIndicator() {
-      const indicator = document.getElementById('turnIndicator');
-      indicator.textContent = `دور الفريق ${gameState.currentTurn === 'red' ? 'الأحمر' : 'الأزرق'}`;
+      elements.turnIndicator.textContent = `دور الفريق ${gameState.currentTurn === 'red' ? 'الأحمر' : 'الأزرق'}`;
     }
 
     // Update players list
     function updatePlayersList() {
-      const list = document.getElementById('playersList');
-      list.innerHTML = '';
+      elements.playersList.innerHTML = '';
 
       Object.values(gameState.players).forEach(player => {
         const playerDiv = document.createElement('div');
@@ -916,42 +984,40 @@
         
         playerDiv.appendChild(nameSpan);
         playerDiv.appendChild(roleSpan);
-        list.appendChild(playerDiv);
+        elements.playersList.appendChild(playerDiv);
       });
     }
 
     // Show winner
     function showWinner() {
-      const modal = document.getElementById('winnerModal');
-      const winnerText = document.getElementById('winnerText');
-      winnerText.textContent = `🎉 الفريق ${gameState.winner === 'red' ? 'الأحمر' : 'الأزرق'} يفوز!`;
-      modal.classList.remove('hidden');
+      elements.winnerText.textContent = `🎉 الفريق ${gameState.winner === 'red' ? 'الأحمر' : 'الأزرق'} يفوز!`;
+      elements.winnerModal.classList.remove('hidden');
       saveGameState();
     }
 
     // Close winner modal
     function closeWinnerModal() {
-      document.getElementById('winnerModal').classList.add('hidden');
+      elements.winnerModal.classList.add('hidden');
     }
 
     // New game
     function newGame() {
+      if (!gameState.isRoomCreator) {
+        showError('فقط منشئ الغرفة يمكنه بدء لعبة جديدة');
+        return;
+      }
+      
       showLoading();
       
-      if (gameState.isRoomCreator) {
-        gameState.cards = [];
-        gameState.currentTurn = 'red';
-        gameState.redScore = 9;
-        gameState.blueScore = 8;
-        gameState.winner = null;
-        gameState.spymasterMode = false;
-        
-        generateCards();
-        saveGameState();
-        addChatMessage('النظام', 'بدأت لعبة جديدة!');
-      } else {
-        alert('فقط منشئ الغرفة يمكنه بدء لعبة جديدة');
-      }
+      gameState.cards = [];
+      gameState.currentTurn = 'red';
+      gameState.redScore = 9;
+      gameState.blueScore = 8;
+      gameState.winner = null;
+      
+      generateCards();
+      saveGameState();
+      addChatMessage('النظام', 'بدأت لعبة جديدة!');
       
       hideLoading();
       closeWinnerModal();
@@ -959,8 +1025,7 @@
 
     // Chat functionality
     function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
+      const message = elements.chatInput.value.trim();
       
       if (message && gameState.currentPlayer) {
         const chatRef = database.ref(`rooms/${gameState.roomCode}/chat`);
@@ -970,12 +1035,11 @@
           timestamp: new Date().getTime()
         });
         
-        input.value = '';
+        elements.chatInput.value = '';
       }
     }
 
     function addChatMessage(sender, message) {
-      const chatMessages = document.getElementById('chatMessages');
       const messageDiv = document.createElement('div');
       messageDiv.className = 'chat-message';
       
@@ -990,31 +1054,49 @@
         <div>${message}</div>
       `;
       
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      elements.chatMessages.appendChild(messageDiv);
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
+
+    // Show error message
+    function showError(message) {
+      elements.errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+      setTimeout(() => {
+        elements.errorContainer.innerHTML = '';
+      }, 3000);
     }
 
     // Show loading screen
     function showLoading() {
-      document.getElementById('loadingScreen').classList.remove('hidden');
+      elements.loadingScreen.classList.remove('hidden');
     }
 
     // Hide loading screen
     function hideLoading() {
-      document.getElementById('loadingScreen').classList.add('hidden');
+      elements.loadingScreen.classList.add('hidden');
     }
 
-    // Event listeners
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize UI event listeners
-      document.getElementById('createRoomBtn').addEventListener('click', createRoom);
-      document.getElementById('joinGameBtn').addEventListener('click', joinGame);
+    // Initialize event listeners
+    function initEventListeners() {
+      elements.createRoomBtn.addEventListener('click', createRoom);
+      elements.joinGameBtn.addEventListener('click', joinGame);
+      elements.spymasterBtn.addEventListener('click', toggleSpymaster);
+      elements.passTurnBtn.addEventListener('click', passTurn);
+      elements.newGameBtn.addEventListener('click', newGame);
+      elements.newGameModalBtn.addEventListener('click', newGame);
+      elements.closeWinnerBtn.addEventListener('click', closeWinnerModal);
+      elements.sendMessageBtn.addEventListener('click', sendMessage);
       
-      document.getElementById('chatInput').addEventListener('keypress', function(e) {
+      elements.chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           sendMessage();
         }
       });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initEventListeners();
     });
   </script>
 </body>
